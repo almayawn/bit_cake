@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:bit_cake/screens/menu.dart';
 import 'package:bit_cake/screens/cake_form.dart';
-import 'package:bit_cake/models/cake.dart';
 
 import '../screens/cake_list.dart';
 
 class LeftDrawer extends StatelessWidget {
-  const LeftDrawer({super.key, required this.cakes});
-
-  final List<Cake> cakes;
+  const LeftDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,7 @@ class LeftDrawer extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Bit Cake',
+                  'Memory Bouquet',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -31,7 +28,7 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(10)),
-                Text("A Cake for A Cake",
+                Text("Used to be a cake shop. Now you just add flower entries.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15,
@@ -48,29 +45,29 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(cakes : cakes),
+                    builder: (context) => MyHomePage(),
                   ));
             },
           ),
           ListTile(
-            leading: const Icon(Icons.cake),
-            title: const Text('View Cake'),
+            leading: const Icon(Icons.assistant),
+            title: const Text('View Entry'),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CakeListPage(cakes : cakes),
+                    builder: (context) => const FlowerListPage(),
                   ));
             },
           ),
           ListTile(
-            leading: const Icon(Icons.egg),
-            title: const Text('Add Cake'),
+            leading: const Icon(Icons.create),
+            title: const Text('Add Entry'),
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BakeryFormPage(cakes : cakes),
+                    builder: (context) => const BakeryFormPage(),
                   ));
             },
           ),

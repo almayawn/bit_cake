@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:bit_cake/widgets/menu_card.dart';
 import 'package:bit_cake/widgets/left_drawer.dart';
-import 'package:bit_cake/models/cake.dart';
 
 class MyHomePage extends StatelessWidget {
-  final List<Cake> cakes;
 
-  MyHomePage({Key? key,required this.cakes}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
   final List<MenuItem> items = [
-    MenuItem("View Cake", Icons.cake, const Color(0xFFE790AD)),
-    MenuItem("Add Cake", Icons.egg, Colors.teal.shade200),
+    MenuItem("View Entry", Icons.assistant, const Color(0xFFE790AD)),
+    MenuItem("Add Entry", Icons.create, Colors.teal.shade200),
     MenuItem("Logout", Icons.logout, Colors.black38),
   ];
 
@@ -18,13 +16,13 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Bit Cake',
+          'Memory Bouquet',
         ),
         centerTitle: false,
         backgroundColor: Colors.teal.shade200,
         foregroundColor: Colors.white,
       ),
-      drawer: LeftDrawer(cakes: cakes),
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
@@ -36,7 +34,7 @@ class MyHomePage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 // Widget Text untuk menampilkan tulisan dengan alignment center dan style yang sesuai
                 child: Text(
-                  'Cake Stash',
+                  'Flower Entry',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 30,
@@ -56,7 +54,7 @@ class MyHomePage extends StatelessWidget {
                 shrinkWrap: true,
                 children: items.map((MenuItem item) {
                   // Iterasi untuk setiap item
-                  return MenuCard(item, cakes : cakes);
+                  return MenuCard(item);
                 }).toList(),
               ),
             ],

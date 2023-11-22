@@ -10,6 +10,7 @@ Cake lists. List cakes. Or something like that. It's just cakes.
 For easy access
 - [Tugas 7](#tugas-7)
 - [Tugas 8](#tugas-8)
+- [Tugas 9](#tugas-9)
 
 ## Tugas 7
 
@@ -362,3 +363,71 @@ class CakeListPage extends StatelessWidget {
 ```
 
 Terakhir saya membuat ```List<Cake> cakes``` pada setiap constructor class agar cake list dapat tersimpan antar halaman/route.
+
+## Tugas 9
+
+### Pertanyaan
+1. Apakah bisa kita melakukan pengambilan data JSON tanpa membuat model terlebih dahulu? Jika iya, apakah hal tersebut lebih baik daripada membuat model sebelum melakukan pengambilan data JSON?
+
+    Bisa, seperti menggunakan dictionary, namun hal tersebut tidak lebih baik daripada membuat model karena dengan model kita dapat memastikan semua attribute ada. Jika kita menggunakan dictionary, mungkin saja ada suatu attribute yang tidak ada (terlewat karena miss).
+
+2. Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+
+    Cookies adalah informasi sesi yang disimpan secara lokal. CookiesRequest adalah class yang mengediakan fungsi untuk inisiasi sesssion, login, dan logout dan dapat melakukan permintan HTTP seperti POST dan GET. instance CookieRequest harus dibagikan kepada semua komponen pada aplikasi Flutter agar semuanya memiliki session yang sama.
+
+3. Jelaskan mekanisme pengambilan data dari JSON hingga dapat ditampilkan pada Flutter.
+
+    - Membuat model dengan model data JSON (saya menggunakan QuickType)
+
+    - Menambahkan ```<uses-permission android:name="android.permission.INTERNET" />``` pada ```android/app/src/main/AndroidManifest.xml``` untuk dapat akses internet
+
+    - Melakukan Fetch data untuk mengirim permintaan HTTP untuk mendapatkan data
+
+        ```dart
+      Future<List<Cake>> fetchCake() async {
+        var url = Uri.parse(
+            'https://alma-laras-tugas.pbp.cs.ui.ac.id/get-flower/');
+        var response = await http.get(
+          url,
+          headers: {"Content-Type": "application/json"},
+        );
+
+        var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+        List<Cake> cakes = [];
+        for (var d in data) {
+          if (d != null) {
+            cakes.add(Cake.fromJson(d));
+          }
+        }
+        return cakes;
+      }
+        ```
+
+    - Menampilkannya dengan ```FutureBuilder```. Fungsi tersebut me-return ```snapshot```, ```snapshot.data``` akan diolah untuk ditampilkan pada ListView.builder
+
+4. Jelaskan mekanisme autentikasi dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+
+    - Pengguna memasukkan data akun yaitu username dan password pada laman LoginPage.
+    - Ketika tombol login ditekan, CookieRequest akan menjalankan fungsi login dan mengirim HTTP request pada proyek Django kita
+    - Django melakukan autentikasi seperti ```user = authenticate(username=username, password=password)``` pada views.py milik authentication. Setelah itu dicek apakah user is ```not None``` dan ```user.is_active:``` untuk menampilkan message yang sesuai.
+    - Jika request.loggedIn, pengguna ditampilkan screen MyHomePage yang artinya pengguna sudah berhasil login
+
+5. Sebutkan seluruh widget yang kamu pakai pada tugas ini dan jelaskan fungsinya masing-masing.
+
+    - **FutureBuilder** : Membangun widget secara asinkron. Digunakan untuk Mengelola status loading, error, dan data yang tersedia.
+    - **TextField** : Agar dapat menerima user input. Digunakan pada login untuk nama dan kata sandi
+    - **SizedBox** : Widget ini menambagkan ruang vertikal. Menampilkan informasi mengenai Cake
+    - **ListView.builder** : Membuat list dari child widget. Dapat digunakan saat menampilkan data Cake semua secara vertikal dan dapat discroll
+    - **Padding** : Widget yang memberikan insets berdasarkan padding yang diberikan.
+    - **Column** : Melayout widgets secara vertical
+    - **AppBar** : Container yang menampilkan konten dan actions di bagian atas layar
+    - **Scaffold** : Widget yang mengimplementasikan basic material design visual
+
+6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).
+    1. Saya membuat aplikasi baru di Django app saya bernama ```authentication``` dan menginstall library ```corsheaders```. Setelag itu membuat fungsi ``login`` dan ``logout`` pada ```authentication/views.py```.
+    2. Install package ```pbp_django_auth``` dan modifikasi root widget untuk menyediakan instance ```CookieRequest```. Setelah itu saya membuat ```login.dart``` untuk halaman login.
+    3. Kemudian saya menggunakan QuickType untu membuat models ```Cake``` pada ```lib/models/cake.dart```
+    4. Saya menggunakan model tersebut pada ```lib/screens/cake_list.dart``` dan ```lib/screens/cake_detail.dart``` untuk menampilkan model ```Cake``` dengan mekanisme pengambilan data dari json.
+
+Perlu diketahui bahwa aplikasi ini telah direfractor menjadi Flower untuk menyamakan web aplikasi Memory Bouquet
